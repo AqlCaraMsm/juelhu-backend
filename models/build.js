@@ -8,7 +8,8 @@ const buildSchema = new mongoose.Schema({
   authors: [{
     id: { type: String, required: true },
     name: { type: String, required: true }
-  }]
+  }],
+  section: { type: String, required: false }
 });
 
 module.exports = mongoose.model('Build', buildSchema);

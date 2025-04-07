@@ -1,7 +1,9 @@
 const express = require('express');
+const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const Build = require('./models/build');
+const Author = require('./models/author');
 
 // Initialize the app
 const app = express();
@@ -9,9 +11,10 @@ const port = 3000;
 
 // Middleware
 app.use(bodyParser.json()); // For parsing application/json
+app.use(cors());
 
 // MongoDB connection
-mongoose.connect('mongodb+srv://xumt:1234@juelhu.cghril3.mongodb.net/?retryWrites=true&w=majority&appName=juelhu', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb+srv://xumt:1234@juelhu.cghril3.mongodb.net/juelhu?retryWrites=true&w=majority&appName=juelhu', { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
 
@@ -75,6 +78,29 @@ app.delete('/builds/:id', async (req, res) => {
     const deletedBuild = await Build.findByIdAndDelete(req.params.id);
     if (!deletedBuild) return res.status(404).json({ error: 'Build not found' });
     res.status(200).json({ message: 'Build deleted' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ------------------------------- Authors
+
+// Read all authors
+app.get('/authors', async (req, res) => {
+  try {
+    const authors = await Author.find();
+    res.status(200).json(authors);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Read a single author by ID
+app.get('/authors/:id', async (req, res) => {
+  try {
+    const author = await Author.findById(req.params.id);
+    if (!author) return res.status(404).json({ error: 'Author not found' });
+    res.status(200).json(author);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
