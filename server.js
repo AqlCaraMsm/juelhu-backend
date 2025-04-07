@@ -7,7 +7,7 @@ const Author = require('./models/author');
 
 // Initialize the app
 const app = express();
-const port = 3000;
+const port = 8080;
 
 // Middleware
 app.use(bodyParser.json()); // For parsing application/json
@@ -22,10 +22,10 @@ mongoose.connect('mongodb+srv://xumt:1234@juelhu.cghril3.mongodb.net/juelhu?retr
 
 // Create a new build
 app.post('/builds', async (req, res) => {
-  const { name, link, coords, authors } = req.body;
+  const { name, link, coords, authors, section } = req.body;
 
   try {
-    const newBuild = new Build({ name, link, coords, authors });
+    const newBuild = new Build({ name, link, coords, authors, section });
     await newBuild.save();
     res.status(201).json(newBuild);
   } catch (err) {
@@ -56,12 +56,12 @@ app.get('/builds/:id', async (req, res) => {
 
 // Update an build by ID
 app.put('/builds/:id', async (req, res) => {
-  const { name, link, coords, authors } = req.body;
+  const { name, link, coords, authors, section } = req.body;
 
   try {
     const updatedBuild = await Build.findByIdAndUpdate(
       req.params.id,
-      { name, link, coords, authors },
+      { name, link, coords, authors, section },
       { new: true }
     );
 
