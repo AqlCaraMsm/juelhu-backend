@@ -7,7 +7,7 @@ const Author = require('./models/author');
 
 // Initialize the app
 const app = express();
-const port = 8080;
+const port = process.env.PORT || 8080;
 
 // Middleware
 app.use(bodyParser.json()); // For parsing application/json
